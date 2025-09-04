@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Dino Game</title>
+  <link rel="stylesheet" href="style.css">
+
+  <!-- 像素字體 -->
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+  <style>
+    input[type="text"] {
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+
+<div id="keyword-container" style="text-align:center; margin-top:50px;">
+  <h2>請輸入「廣迅媒體」開始遊戲</h2>
+  <input 
+    type="text"
+    id="keyword-input"
+    placeholder="請輸入：廣迅媒體"
+    maxlength="10"
+    enterkeyhint="go"
+    inputmode="text"
+    autocomplete="off"
+    oncopy="return false" 
+    oncut="return false" 
+    onpaste="return false"
+    oncontextmenu="return false"
+  >
+  <button onclick="validateKeyword()">開始遊戲</button>
+  <p id="error-msg" style="color:red; display:none;"></p>
+</div>
+
+<div id="game-container" style="display:none;">
+  <canvas id="gameCanvas" width="1920" height="1080"></canvas>
+  <script src="game.js"></script>
+</div>
+
+<script>
+function validateKeyword() {
+  const keywordInput = document.getElementById('keyword-input');
+  const keyword = keywordInput.value.trim();
+  const errorMsg = document.getElementById('error-msg');
+
+  if (keyword === '') {
+    errorMsg.style.display = 'none';
+    return;
+  }
+
+  if (keyword === '廣迅媒體') {
+    document.getElementById('keyword-container').style.display = 'none';
+    document.getElementById('game-container').style.display = 'block';
+    errorMsg.style.display = 'none';
+    startGame(); // 呼叫遊戲開始函式
+  } else {
+    errorMsg.textContent = '輸入錯誤，請正確輸入「廣迅媒體」';
+    errorMsg.style.display = 'block';
+    keywordInput.value = '';
+
+    if (navigator.vibrate) {
+      navigator.vibrate(200);
+    }
+  }
+}
+
+// Enter 鍵觸發驗證
+document.getElementById('keyword-input').addEventListener('keydown', function(event) {
+  if (event.key === 'Enter') {
+    validateKeyword();
+  }
+});
+
+// 防止 copy/paste
+const kwInput = document.getElementById('keyword-input');
+['copy','paste','cut'].forEach(evt=>{
+  kwInput.addEventListener(evt, e=>e.preventDefault());
+});
+kwInput.addEventListener('contextmenu', e=>e.preventDefault());
+</script>
+
+</body>
+</html>
